@@ -13,17 +13,17 @@ static SpeedBinding speed_bindings[] = {
     { XK_Super_L,      3000 },
     { XK_Alt_L,        1500 },
     { XK_a,            100  },
-    { XK_Control_L,    10   },
+    { XK_Control_L,    25   },
 };
 
 /* moves the mouse pointer
  * you can also add any other direction (e.g. diagonals) */
 static MoveBinding move_bindings[] = {
     /* key         x      y */
-    { XK_j,        -1,     0 },
-    { XK_l,         1,     0 },
-    { XK_i,         0,    -1 },
-    { XK_k,         0,     1 },
+    { XK_h,        -1,     0 }, // left
+    { XK_j,         0,     1 }, // down
+    { XK_k,         0,    -1 }, // up
+    { XK_l,         1,     0 }, // right
 };
 
 /* 1: left
