@@ -4,7 +4,7 @@ CC      = /usr/bin/gcc
 CFLAGS  = -Wall -g
 LDFLAGS = -lX11 -lXtst -lpthread
 
-PREFIX = /usr/local
+PREFIX = ${HOME}/.local
 
 SRC = xmouseless.c
 BIN = xmouseless
