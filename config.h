@@ -1,19 +1,19 @@
-
+#include <X11/keysym.h>
 /* the rate at which the mouse moves in Hz
  * does not change its speed */
 static const unsigned int move_rate = 50;
 
 /* the default speed of the mouse pointer
  * in pixels per second */
-static const unsigned int default_speed = 500;
+static const unsigned int default_speed = 650;
 
 /* changes the speed of the mouse pointer */
 static SpeedBinding speed_bindings[] = {
-    /* key             speed */  
-    { XK_Super_L,      3000 },
-    { XK_Alt_L,        1500 },
-    { XK_a,            100  },
-    { XK_Control_L,    25   },
+    /* key             speed */
+    { XK_Super_L,      (default_speed/100*500) },
+    { XK_Alt_L,        (default_speed/100*150) },
+    { XK_a,            (default_speed/100*50)  },
+    { XK_Control_L,    (default_speed/100*25)  },
 };
 
 /* moves the mouse pointer
@@ -30,7 +30,7 @@ static MoveBinding move_bindings[] = {
  * 2: middle
  * 3: right */
 static ClickBinding click_bindings[] = {
-    /* key         button */  
+    /* key         button */
     { XK_space,    1 },
     { XK_f,        1 },
     { XK_d,        2 },
@@ -45,14 +45,11 @@ static ScrollBinding scroll_bindings[] = {
     { XK_p,        0 ,   -25 },
     { XK_plus,     0 ,    80 },
     { XK_minus,    0 ,   -80 },
-    { XK_h,        25,    0  },
-    { XK_g,       -25,    0  },
 };
 
 /* executes shell commands */
 static ShellBinding shell_bindings[] = {
-    /* key         command */  
-    { XK_b,        "wmctrl -a firefox" },
+    /* key         command */
     { XK_0,        "xdotool mousemove 0 0" },
 };
 
