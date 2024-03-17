@@ -5,15 +5,15 @@ static const unsigned int move_rate = 50;
 
 /* the default speed of the mouse pointer
  * in pixels per second */
-static const unsigned int default_speed = 650;
+static unsigned int default_speed = 680;
 
 /* changes the speed of the mouse pointer */
 static SpeedBinding speed_bindings[] = {
     /* key             speed */
-    { XK_Super_L,      (default_speed/100*500) },
-    { XK_Alt_L,        (default_speed/100*150) },
-    { XK_a,            (default_speed/100*50)  },
-    { XK_Control_L,    (default_speed/100*25)  },
+    { XK_Super_L,      (500) },
+    { XK_Alt_L,        (150) },
+    { XK_a,            (50)  },
+    { XK_Control_L,    (25)  },
 };
 
 /* moves the mouse pointer
@@ -56,4 +56,12 @@ static ShellBinding shell_bindings[] = {
 /* exits on key release which allows click and exit with one key */
 static KeySym exit_keys[] = {
     XK_Escape, XK_q, XK_space
+};
+
+static ResourcePref resources[] = {
+	{"NormalSpeed",    &default_speed},
+	{"ExtraFastSpeed", &(speed_bindings[0].speed)},
+	{"FastSpeed",      &(speed_bindings[1].speed)},
+	{"SlowSpeed",      &(speed_bindings[2].speed)},
+	{"ExtraSlowSpeed", &(speed_bindings[3].speed)},
 };

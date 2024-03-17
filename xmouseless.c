@@ -5,14 +5,16 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <limits.h>
+#include <string.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/XKBlib.h>
 #include <X11/extensions/XTest.h>
+#include <X11/Xresource.h>
 
 #define LENGTH(X)   (sizeof X / sizeof X[0])
-
 
 typedef struct {
     KeySym keysym;
@@ -40,6 +42,11 @@ typedef struct {
     KeySym keysym;
     char *command;
 } ShellBinding;
+
+typedef struct {
+	char *name;
+	void *dst;
+} ResourcePref;
 
 /* load configuration */
 #include "config.h"
@@ -75,6 +82,8 @@ void handle_key(KeyCode keycode, Bool is_press);
 void init_x();
 void close_x(int exit_status);
 
+static void load_xresources(void);
+static void resource_load(XrmDatabase db, char *name, void *dst);
 
 void get_pointer() {
     int x, y;
@@ -248,12 +257,56 @@ void handle_key(KeyCode keycode, Bool is_press) {
     }
 }
 
+void
+resource_load(XrmDatabase db, char *name, void *dst)
+{
+	unsigned int *idst = NULL;
+
+	idst = dst;
+
+	char fullname[256];
+	char *type = NULL;
+	XrmValue ret;
+
+	snprintf(fullname, sizeof(fullname), "%s.%s", "xmouseless", name);
+	fullname[sizeof(fullname) - 1] = '\0';
+
+	XrmGetResource(db, fullname, "*", &type, &ret);
+
+	if (!(ret.addr == NULL)) {
+		unsigned long tmp = 0;
+		tmp = strtoul(ret.addr, NULL, 10);
+		if (tmp >= 0 && tmp <= INT_MAX)
+			*idst = (int)tmp;
+	}
+}
+
+void
+load_xresources(void)
+{
+	Display *display;
+	char *resm;
+	XrmDatabase db;
+	ResourcePref *p;
+
+	display = XOpenDisplay(NULL);
+	resm = XResourceManagerString(display);
+	if (!resm)
+		return;
+
+	db = XrmGetStringDatabase(resm);
+	for (p = resources; p < resources + LENGTH(resources); p++)
+		resource_load(db, p->name, p->dst);
+	XCloseDisplay(display);
+}
+
 int main () {
     char keys_return[32];
     int rc;
     int i, j;
 
     init_x();
+    load_xresources();
 
     get_pointer();
     mouseinfo.speed_x = 0;
